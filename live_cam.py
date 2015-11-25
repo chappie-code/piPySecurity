@@ -20,7 +20,11 @@ def upload_image(image_name):
 def html_post_image(image_name):
     url = 'http://owlpost.io/receive.php'
     files = {'file': open(image_name, 'rb')}
-    r = requests.post(url, files=files)
+    try:
+        r = requests.post(url, files=files)
+    except requests.exceptions.RequestException as e:
+        print e
+        sleep(60)
     print "html sent"
     
 
@@ -31,7 +35,7 @@ with picamera.PiCamera() as camera:
 
     for filename in camera.capture_continuous('images/image{counter:05d}.jpg'):
         print('Captured %s' % filename)
-        upload_image(filename)
+#        upload_image(filename)
         html_post_image(filename)
         os.remove(filename)
         time.sleep(10) # wait 5 seconds
