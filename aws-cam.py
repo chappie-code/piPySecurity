@@ -5,12 +5,13 @@ import requests
 import json
 import ftplib
 import os
+import config
 
 def aws_upload_image(filename):
     endpoint = "s3-us-west-2.amazonaws.com"
     print("uploading to aws")
-    access_key = "AKIAI2QTGXXG6QXJIEJA"
-    secret_key = "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"
+    access_key = config.access_key
+    secret_key = config.secret_key
     file = open(filename,'rb')
     conn = tinys3.Connection(access_key, secret_key, endpoint=endpoint)
     conn.upload(filename,file,'pi-cam-test')
