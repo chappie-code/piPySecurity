@@ -6,6 +6,8 @@ import json
 import ftplib
 import os
 import config
+from PIL import Image
+
 
 def aws_upload_image(filename):
     endpoint = "s3-us-west-2.amazonaws.com"
@@ -24,10 +26,14 @@ with picamera.PiCamera() as camera:
 
     for filename in camera.capture_continuous('images/image{counter:05d}.jpg'):
         print('Captured %s' % filename)
-#        upload_image(filename)
-
-        aws_upload_image(filename);
+        upload_image(filename)
+        im = Image.open(filename)
+        im.rotate(180)
+        im.save(filename)
+        im.close()
+        print("file rotated and saved")
+        aws_upload_image(filename)
         os.remove(filename)
-        time.sleep(10) # wait 5 seconds
+        time.sleep(60 * 60) # wait 1 hour
         
 
