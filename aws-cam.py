@@ -26,7 +26,7 @@ with picamera.PiCamera() as camera:
 
     for filename in camera.capture_continuous('images/image{counter:05d}.jpg'):
         print('Captured %s' % filename)
-        upload_image(filename)
+        aws_upload_image(filename)
         im = Image.open(filename)
         im.rotate(180)
         im.save(filename)
