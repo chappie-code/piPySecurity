@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import time
 import tinys3 
 import picamera
@@ -6,7 +8,7 @@ import json
 import ftplib
 import os
 import config
-from PIL import Image
+
 
 
 def aws_upload_image(filename):
@@ -22,18 +24,18 @@ def aws_upload_image(filename):
 
 with picamera.PiCamera() as camera:
     camera.start_preview()
+    camera.rotation = 180
     time.sleep(10) #warmup
+    count_list = list(range(0,48))
+    for val in count_list:
+       filename = 'images/image_'+str(val)+'.jpg'
+       camera.capture(filename)
+       aws_upload_image(filename)
+       os.remove(filename)
+       time.sleep(30)
 
-    for filename in camera.capture_continuous('images/image{counter:05d}.jpg'):
-        print('Captured %s' % filename)
-        aws_upload_image(filename)
-        im = Image.open(filename)
-        im.rotate(180)
-        im.save(filename)
-        im.close()
-        print("file rotated and saved")
-        aws_upload_image(filename)
-        os.remove(filename)
-        time.sleep(60 * 60) # wait 1 hour
+    camera.stop_preview()
+
+    
         
 
