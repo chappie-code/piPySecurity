@@ -28,7 +28,7 @@ with picamera.PiCamera() as camera:
     time.sleep(10) #warmup
     count_list = list(range(0,48))
     for val in count_list:
-       filename = 'images/image_'+str(val)+'.jpg'
+       filename = config.path+'/image_'+str(val)+'.jpg'
        camera.capture(filename)
        aws_upload_image(filename)
        os.remove(filename)
